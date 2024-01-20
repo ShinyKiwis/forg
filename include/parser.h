@@ -2,10 +2,12 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include "util.h"
+#include "yaml_node.h"
 
 class Parser {
 public:
   Parser();
   ~Parser();
-  std::map<std::string, std::string>parseYAML(const std::string&);
+  YAMLNode parseYAML(const std::string&);
 };

@@ -5,15 +5,17 @@
 #include <map>
 #include <cstdlib>
 #include "parser.h"
-
+#include "yaml_node.h"
 
 class Config {
 public:
   Config(std::string);
   ~Config();
+
+  YAMLNode getConfigs() const;
 private:
   Parser parser;
-  std::map<std::string, std::string> config;
+  YAMLNode configs;
   std::string configPath = "";
   std::string configFilePath = "";
   void initializeConfigFolder();

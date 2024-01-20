@@ -1,15 +1,19 @@
 #include "../include/config.h"
 namespace fs = std::filesystem;
 
-Config::Config(std::string configPath) {
+Config::Config(std::string configPath): parser(), configs(YAMLNode::Type::map) {
   this->configPath = configPath.empty() ? std::string(getHomeDir()) + "/.config/forg/" : configPath;
   configFilePath = this->configPath + "config.yml";
   initializeConfigFolder();
-  this->config = parser.parseYAML(configFilePath);
+  this->configs = parser.parseYAML(configFilePath);
 }
 
 Config::~Config() {
 
+}
+
+YAMLNode Config::getConfigs() const {
+  return configs;
 }
 
 void Config::initializeConfigFolder () {
