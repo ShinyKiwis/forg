@@ -8,6 +8,10 @@ Parser::~Parser() {
 
 }
 
+std::vector<std::string>& Parser::getExts() {
+  return exts;
+}
+
 YAMLNode Parser::parseYAML(const std::string& filepath) {
   YAMLNode fileContent(YAMLNode::Type::map);
   std::ifstream configFile(filepath);
@@ -31,6 +35,7 @@ YAMLNode Parser::parseYAML(const std::string& filepath) {
         YAMLNode scalarNode(YAMLNode::Type::scalar);
         scalarNode.setScalar(value);
         nestedNodes.setMapValue(strip(key), scalarNode);
+        exts.push_back(strip(key));
       }else if(value.empty()) {
         prevKey = key;
       }else {
@@ -42,7 +47,6 @@ YAMLNode Parser::parseYAML(const std::string& filepath) {
         scalarNode.setScalar(value);
         fileContent.setMapValue(key, scalarNode);
       }
-      std::cout << key << ":" << value <<"\n";
     }
   }
 

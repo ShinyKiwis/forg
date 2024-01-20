@@ -1,9 +1,9 @@
 #include "../include/config.h"
 namespace fs = std::filesystem;
 
-Config::Config(std::string configPath): parser(), configs(YAMLNode::Type::map) {
-  this->configPath = configPath.empty() ? std::string(getHomeDir()) + "/.config/forg/" : configPath;
-  configFilePath = this->configPath + "config.yml";
+Config::Config(const std::string& configPath): parser(), configs(YAMLNode::Type::map) {
+  this->configFolderPath = configPath.empty() ? std::string(getHomeDir()) + "/.config/forg/" : configPath;
+  configFilePath = this->configFolderPath + "config.yml";
   initializeConfigFolder();
   this->configs = parser.parseYAML(configFilePath);
 }
@@ -12,14 +12,22 @@ Config::~Config() {
 
 }
 
-YAMLNode Config::getConfigs() const {
-  return configs;
+std::vector<std::string>& Config::getExts() {
+  return parser.getExts();
+}
+
+std::string Config::getConfig(const std::string& key) {
+  return getHomeDir() + configs.getMapValue(key).getScalar().substr(1);
+}
+
+std::string Config::getNestedConfig(const std::string& parentKey, const std::string& key) {
+  return getHomeDir() + configs.getMapValue(parentKey).getMapValue(key).getScalar().substr(1);
 }
 
 void Config::initializeConfigFolder () {
-  if(!fs::exists(configPath)) {
+  if(!fs::exists(configFolderPath)) {
     try {
-      fs::create_directory(configPath);
+      fs::create_directory(configFolderPath);
       std::ofstream configFile(configFilePath);
       if(configFile.is_open()) {
         configFile.close();

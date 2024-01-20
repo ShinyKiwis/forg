@@ -1,6 +1,7 @@
-#include "../include/config.h"
+#include "../include/forg.h"
 
 int main() {
-  Config config("");
+  FOrg forg;
+  forg.run();
   return 0;
 }
